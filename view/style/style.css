@@ -1,0 +1,22 @@
+.Livres{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.livreRes {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.Image {
+    width: 130px;
+    height: auto;
+    border-radius: 5px;
+}

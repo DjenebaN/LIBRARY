@@ -1,0 +1,53 @@
+CREATE DATABASE LIBRARY;
+USE LIBRARY;
+
+CREATE TABLE LECTEUR (
+    Id_Lecteur INT NOT NULL AUTO_INCREMENT,
+    Nom VARCHAR(50) NOT NULL,
+    Prenom VARCHAR(50) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    MDP VARCHAR(255) NOT NULL,
+    Telephone VARCHAR(20) NOT NULL,
+    Adresse VARCHAR(100) NOT NULL,
+    CP VARCHAR(10) NOT NULL,
+    Ville VARCHAR(50) NOT NULL,
+    Frais FLOAT DEFAULT 0.00,
+    PRIMARY KEY (Id_Lecteur)
+);
+
+CREATE TABLE ETAT (
+    Id_Etat INT NOT NULL AUTO_INCREMENT,
+    Etat VARCHAR(50) NOT NULL,
+    PRIMARY KEY (Id_Etat)
+);
+
+INSERT INTO ETAT (Etat) VALUES 
+    ('Disponible'),
+    ('Emprunté'),
+    ('En Retard'),
+    ('En Cours');
+
+CREATE TABLE LIVRE (
+    Id_Livre INT NOT NULL AUTO_INCREMENT,
+    Id_API VARCHAR(50) UNIQUE NOT NULL,  -- ID du livre depuis Open Library
+    Titre VARCHAR(255) NOT NULL,
+    Auteur VARCHAR(255) NOT NULL,
+    Annee VARCHAR(4),
+    Image_URL VARCHAR(255),  -- Stocke uniquement l'URL de l'image
+    Etat INT NOT NULL DEFAULT 1,  
+    PRIMARY KEY (Id_Livre),
+    FOREIGN KEY (Etat) REFERENCES ETAT(Id_Etat) ON DELETE RESTRICT
+);
+
+
+CREATE TABLE PRET (
+    Id_Pret INT NOT NULL AUTO_INCREMENT,
+    Date_Emprunt DATE NOT NULL DEFAULT CURDATE(),
+    Date_Retour DATE NOT NULL,
+    Id_Lecteur INT NOT NULL,
+    Id_Livre INT NOT NULL,
+    PRIMARY KEY (Id_Pret),
+    FOREIGN KEY (Id_Lecteur) REFERENCES LECTEUR(Id_Lecteur) ON DELETE CASCADE,
+    FOREIGN KEY (Id_Livre) REFERENCES LIVRE(Id_Livre) ON DELETE CASCADE
+);
+
