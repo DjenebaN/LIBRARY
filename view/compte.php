@@ -23,7 +23,6 @@ $mesPrets = $prets->afficherPrets($ID, $Id_Etat);
 echo '<p>Nom : ' . htmlspecialchars($detailLecteur['Nom']) . '</p>';
 echo '<p>Prenom : ' . htmlspecialchars($detailLecteur['Prenom']) . '</p>';
 echo '<p>Email : ' . htmlspecialchars($detailLecteur['Email']) . '</p>';
-echo '<p>Frais : ' . htmlspecialchars($detailLecteur['Frais']) . '€</p>';
 ?>
 
 <h2> Filter by : </h2>
@@ -40,25 +39,28 @@ echo '<p>Frais : ' . htmlspecialchars($detailLecteur['Frais']) . '€</p>';
                     <button type="submit">Filtrer</button>
                 </form>
 
-<?php
+                <?php
 foreach ($mesPrets as $pret) {
-
-    $Id_Pret = $pret['Id_Pret'];
-    $Id_Livre = $pret['Id_Livre'];
-    echo (htmlspecialchars($pret['Id_Pret']));
     echo "<div>";
     echo "<h3>Livre : " . htmlspecialchars($pret['Titre']) . "</h3>";
-    echo "<h3>Etat : " . htmlspecialchars($pret['Etat_Livre']) . "</h3>";
     echo "<img src='" . htmlspecialchars($pret['Image_URL']) . "' alt='Couverture du livre' width='150' height='200'>";
-    echo "</div><br>";?>
+
+    // Vérifier si l'utilisateur a filtré sur "En retard"
+    if (isset($Id_Etat) && $Id_Etat == 3) { 
+        echo '<p>Frais de retard : ' . number_format($pret['Frais'], 2) . ' €</p>';
+    }
+
+    echo "</div><br>";
+
+?>
 
     <form method="POST" action="controller/pretController.php">
-            <input type="hidden" name="Id_Pret" value="<?php echo htmlspecialchars($pret['Id_Pret']); ?>">
-            <input type="hidden" name="Id_Livre" value="<?php echo htmlspecialchars($pret['Id_Livre']); ?>">
-            <input type="hidden" name="pret" value="supprimer">
-            <input type="submit" value="Rendre">
+        <input type="hidden" name="Id_Pret" value="<?php echo htmlspecialchars($pret['Id_Pret']); ?>">
+        <input type="hidden" name="Id_Livre" value="<?php echo htmlspecialchars($pret['Id_Livre']); ?>">
+        <input type="hidden" name="pret" value="supprimer">
+        <input type="submit" value="Rendre">
     </form>
 
-<?php }
+<?php } 
 
 ?>

@@ -44,7 +44,7 @@ class Pret
 
     public function afficherPrets($Id_Lecteur, $Id_Etat = null) {
         if ($Id_Etat !== null) {
-            $stmt = $this->bdd->prepare("SELECT P.Id_Pret, P.Id_Livre, L.Titre, L.Image_URL, P.Date_Emprunt, P.Date_Retour, E.Etat AS Etat_Livre
+            $stmt = $this->bdd->prepare("SELECT P.Id_Pret, P.Id_Livre, L.Titre, L.Image_URL, P.Date_Emprunt, P.Date_Retour, P.Frais, E.Etat AS Etat_Livre
                             FROM PRET P
                             JOIN LIVRE L ON P.Id_Livre = L.Id_Livre
                             JOIN ETAT E ON P.Etat = E.Id_Etat
@@ -52,7 +52,7 @@ class Pret
             $stmt->bindParam(':Id_Lecteur', $Id_Lecteur, PDO::PARAM_INT);
             $stmt->bindParam(':Id_Etat', $Id_Etat, PDO::PARAM_INT);
         } else {
-            $stmt = $this->bdd->prepare("SELECT P.Id_Pret, P.Id_Livre, L.Titre, L.Image_URL, P.Date_Emprunt, P.Date_Retour, E.Etat AS Etat_Livre
+            $stmt = $this->bdd->prepare("SELECT P.Id_Pret, P.Id_Livre, L.Titre, L.Image_URL, P.Date_Emprunt, P.Date_Retour, P.Frais, E.Etat AS Etat_Livre
                             FROM PRET P
                             JOIN LIVRE L ON P.Id_Livre = L.Id_Livre
                             JOIN ETAT E ON P.Etat = E.Id_Etat
@@ -67,35 +67,43 @@ class Pret
             $dateRetour = new DateTime($pret['Date_Retour']);
             $dateActuelle = new DateTime();
     
-            if ($dateActuelle > $dateRetour && $pret['Etat_Livre'] != 'En retard') {
-                // Mise à jour de l'état du livre
-                $stmt1 = $this->bdd->prepare("UPDATE LIVRE SET Etat = 3 WHERE Id_Livre = ?");
-                $stmt1->execute([$pret['Id_Livre']]);
-    
+            if ($dateActuelle > $dateRetour) { // Si la date actuelle dépasse la date de retour
                 // Calcul des jours de retard
                 $interval = $dateRetour->diff($dateActuelle);
                 $joursRetard = $interval->days;
+                $nouveauxFrais = $joursRetard * 0.20; // 0.20€ par jour de retard
     
-                if ($joursRetard > 0) {
-                    // Calcul des frais de retard (20 centimes par jour)
-                    $frais = $joursRetard * 0.20;
+                // Mettre à jour les frais uniquement si la valeur a changé
+                if ($nouveauxFrais != $pret['Frais']) {
+                    // Mettre à jour les frais dans la table PRET
+                    $stmt1 = $this->bdd->prepare("UPDATE PRET SET Frais = :frais WHERE Id_Pret = :Id_Pret");
+                    $stmt1->bindParam(':frais', $nouveauxFrais, PDO::PARAM_STR);
+                    $stmt1->bindParam(':Id_Pret', $pret['Id_Pret'], PDO::PARAM_INT);
+                    $stmt1->execute();
     
-                    // Mise à jour des frais du lecteur
-                    $stmt2 = $this->bdd->prepare("UPDATE LECTEUR SET Frais = Frais + :frais WHERE Id_Lecteur = :Id_Lecteur");
-                    $stmt2->bindParam(':frais', $frais, PDO::PARAM_STR);
+                    // Mettre à jour les frais du lecteur en recalculant la somme totale des frais
+                    $stmt2 = $this->bdd->prepare("UPDATE LECTEUR 
+                        SET Frais = (SELECT SUM(Frais) FROM PRET WHERE Id_Lecteur = :Id_Lecteur) 
+                        WHERE Id_Lecteur = :Id_Lecteur");
                     $stmt2->bindParam(':Id_Lecteur', $Id_Lecteur, PDO::PARAM_INT);
                     $stmt2->execute();
+
+                    $stmt3 = $this->bdd->prepare("UPDATE PRET SET Etat = 3 WHERE Id_Pret = :Id_Pret");
+                    $stmt3->bindParam(':Id_Pret', $pret['Id_Pret'], PDO::PARAM_INT);
+                    $stmt3->execute();
                 }
             }
         }
     
         return $prets;
-    }    
+    }
+    
+       
     
 
     public function getEtatsRetardCours()
     {
-        $stmt = $this->bdd->prepare("SELECT Id_Etat, Etat FROM ETAT WHERE Etat IN ('En Retard', 'En Cours')");
+        $stmt = $this->bdd->prepare("SELECT Id_Etat, Etat FROM ETAT WHERE Etat IN ('En Cours', 'En Retard')");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -118,40 +126,7 @@ class Pret
 
         
     }
-
-    public function calculerFraisRetard($Id_Lecteur)
-    {
-        $stmt = $this->bdd->prepare("SELECT * FROM PRET WHERE Id_Lecteur = :Id_Lecteur AND Date_Retour < CURDATE() AND etat = 4");  // 4 = "En cours"
-        $stmt->bindParam(':Id_Lecteur', $Id_Lecteur);
-        $stmt->execute();
-
-        $fraisTotaux = 0;
-
-        while ($pret = $stmt->fetch()) {
-            $dateRetour = new DateTime($pret['Date_Retour']);
-            $dateActuelle = new DateTime();
-
-            $interval = $dateRetour->diff($dateActuelle);
-            $joursRetard = $interval->days;
-
-            if ($joursRetard > 0) {
-                $fraisTotaux += $joursRetard * 0.20;
-            }
-        }
-
-        return $fraisTotaux;
-    }
-
-    public function mettreAJourFrais($Id_Lecteur, $frais)
-    {
-        $stmt = $this->bdd->prepare("UPDATE LECTEUR SET Frais = Frais + :frais WHERE Id_Lecteur = :Id_Lecteur");
-        $stmt->bindParam(':frais', $frais);
-        $stmt->bindParam(':Id_Lecteur', $Id_Lecteur);
-        return $stmt->execute();
-    }
-
     
-
 }
 
 ?>

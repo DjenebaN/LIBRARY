@@ -29,7 +29,7 @@
     </div>
 
     <div id="Resultat">
-        <div id="formContainer" data-etat="<?php echo $etatLivre; ?>"></div>
+        
     </div>
 
     
