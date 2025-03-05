@@ -29,7 +29,8 @@
     </div>
 
     <div id="Resultat">
-        
+        <div id="formContainer" data-etat="<?php echo $etatLivre; ?>"></div>
     </div>
+
     
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/LIBRARY/view/commun/footer.php'; ?>

@@ -20,6 +20,7 @@
         <?php 
             }else {?>
                 <li> <a href="index.php?page=Accueil"> Les livres </a> </li>
+                <li> <a href="index.php?page=Accueil"> Log In </a> </li>
             <?php }
             ?>
     </ul>
