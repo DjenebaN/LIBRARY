@@ -10,15 +10,22 @@ class Pret
     }
 
     public function ajouterLivreEtPret($Id_API, $Titre, $Auteur, $Annee, $Image_URL, $Id_Lecteur, $date_Emprunt, $date_retour)
-    {
+{
+    try {
+        // Début de la transaction
+        $this->bdd->beginTransaction();
+
+        // Vérifier si le livre existe déjà dans la base
         $req = $this->bdd->prepare("SELECT Id_Livre FROM LIVRE WHERE Id_API = :Id_API");
         $req->bindParam(':Id_API', $Id_API);
         $req->execute();
         $livre = $req->fetch(PDO::FETCH_ASSOC);
 
         if ($livre) {
+            // Si le livre existe, récupérer son Id_Livre
             $Id_Livre = $livre['Id_Livre'];
         } else {
+            // Si le livre n'existe pas, on l'ajoute dans la base
             $req = $this->bdd->prepare("INSERT INTO LIVRE (Id_API, Titre, Auteur, Annee, Image_URL, Etat) VALUES (:Id_API, :Titre, :Auteur, :Annee, :Image_URL, 1)");
             $req->bindParam(':Id_API', $Id_API);
             $req->bindParam(':Titre', $Titre);
@@ -26,21 +33,41 @@ class Pret
             $req->bindParam(':Annee', $Annee);
             $req->bindParam(':Image_URL', $Image_URL);
             $req->execute();
-            $Id_Livre = $this->bdd->lastInsertId();  // Récupérer le dernier Id_Livre inséré
+            $Id_Livre = $this->bdd->lastInsertId();  // Récupérer l'ID du livre inséré
         }
 
-        $req = $this->bdd->prepare("INSERT INTO PRET (Id_Livre, Id_Lecteur, Date_Emprunt, Date_Retour) VALUES (:Id_Livre, :Id_Lecteur, :date_Emprunt, :date_retour)");
-        $req->bindParam(':Id_Livre', $Id_Livre);
-        $req->bindParam(':Id_Lecteur', $Id_Lecteur);
-        $req->bindParam(':date_Emprunt', $date_Emprunt);
-        $req->bindParam(':date_retour', $date_retour);
+        // Ajouter le prêt dans la base
+        $reqPret = $this->bdd->prepare("INSERT INTO PRET (Id_Livre, Id_Lecteur, Date_Emprunt, Date_Retour) VALUES (:Id_Livre, :Id_Lecteur, :date_Emprunt, :date_retour)");
+        $reqPret->bindParam(':Id_Livre', $Id_Livre);
+        $reqPret->bindParam(':Id_Lecteur', $Id_Lecteur);
+        $reqPret->bindParam(':date_Emprunt', $date_Emprunt);
+        $reqPret->bindParam(':date_retour', $date_retour);
+        $reqPret->execute();
 
-        $stmt = $this->bdd->prepare("UPDATE LIVRE SET Etat = 2 WHERE Id_Livre = :Id_Livre");
-        $stmt->bindParam(':Id_Livre', $Id_Livre, PDO::PARAM_INT);
-        $stmt->execute();
+        // Mise à jour de l'état du livre à "Emprunté" (2)
+        $stmtLivre = $this->bdd->prepare("UPDATE LIVRE SET Etat = 2 WHERE Id_Livre = :Id_Livre");
+        $stmtLivre->bindParam(':Id_Livre', $Id_Livre, PDO::PARAM_INT);
+        $stmtLivre->execute();
 
-        return $req->execute();
+        // Mise à jour de l'état du prêt si nécessaire (par exemple 4 signifie "Emprunté")
+        $stmtPret = $this->bdd->prepare("UPDATE PRET SET Etat = 4 WHERE Id_Livre = :Id_Livre");
+        $stmtPret->bindParam(':Id_Livre', $Id_Livre, PDO::PARAM_INT);
+        $stmtPret->execute();
+
+        // Commit de la transaction
+        $this->bdd->commit();
+
+        // Retourner true si tout s'est bien passé
+        return true;
+
+    } catch (Exception $e) {
+        // En cas d'erreur, annuler la transaction et renvoyer un message d'erreur
+        $this->bdd->rollBack();
+        echo "Erreur : " . $e->getMessage();
+        return false;
     }
+}
+
 
     public function afficherPrets($Id_Lecteur, $Id_Etat = null) {
         if ($Id_Etat !== null) {

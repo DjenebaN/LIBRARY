@@ -1,22 +1,184 @@
-.Livres{
+/* STYLE GLOBAL */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1e1e1e;
+    color: #ddd;
+    margin: 0;
     display: flex;
-    flex-direction: column;
 }
 
-
-.livreRes {
-    width: 200px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.header {
+    background: #222;
+    color: white;
+    padding: 15px;
     text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    height: 150vh;
+    background: #252526;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    margin: 20px 0;
+}
+
+.sidebar nav ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #bbb;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar nav ul li a:hover,
+.sidebar nav ul li a.active {
+    background: #333;
+    color: white;
+}
+
+/* PROFIL */
+.profile {
+    text-align: center;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #555;
+}
+
+/* CONTENU PRINCIPAL */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background: #1e1e1e;
+}
+
+/* BARRE DE RECHERCHE */
+.search-container {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 20px;
 }
 
-.Image {
-    width: 130px;
-    height: auto;
+.search-bar {
+    padding: 12px;
+    font-size: 16px;
+    width: 300px;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+}
+
+#SearchButton {
+    background: #444;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: white;
+    margin-left: 10px;
+}
+
+#Resultat {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);  /* 5 livres par ligne */
+    gap: 20px;              /* Espacement entre les livres */
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;       /* Limite la largeur de la grille */
+    margin: 0 auto;          /* Centrer la grille */
+}
+
+#Resultat h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.livreRes {
+    background: #333;      /* Fond gris pour les livres */
+    color: #fff;           /* Texte blanc */
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 300px;         /* Hauteur maximale pour chaque section de livre */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.livreRes:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+}
+
+.livreRes img {
+    width: 100%;               /* Largeur 100% du conteneur */
+    max-height: 150px;         /* Limite la hauteur maximale de l'image */
+    object-fit: contain;       /* Maintient les proportions sans déformer l'image */
+    border-radius: 5px;        /* Coins arrondis pour l'image */
+    margin-bottom: 10px;       /* Espacement entre l'image et le texte */
+}
+
+.livreRes p {
+    font-size: 14px;
+    color: #bbb;
+    margin: 5px 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .search-bar {
+        width: 100%;
+    }
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 1024px) {
+    #Resultat {
+        grid-template-columns: repeat(3, 1fr); /* 3 livres sur tablette */
+    }
+}
+
+.bttPret {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
     border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.bttPret:hover {
+    background: #666;
+}
+
+#Search{
+    margin-top: 30px;
+    margin-left: 20px;
 }

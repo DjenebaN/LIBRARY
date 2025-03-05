@@ -7,6 +7,7 @@
 
 <script src="view/style/script.js"></script>
 
+</div>
 </body>
 
 </html>
