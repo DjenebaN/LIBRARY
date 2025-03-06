@@ -1,5 +1,6 @@
 <main class="main-content">
 
+
     <div class ="formLogin">
         <form class="form1log" method="POST" action="controller/lecteurController.php">
                 <input name="nom" placeholder="Nom" type="text" required class="input">

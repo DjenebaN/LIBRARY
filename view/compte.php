@@ -55,6 +55,7 @@ $mesPrets = $prets->afficherPrets($ID, $Id_Etat);
                 <?php foreach ($mesPrets as $pret) : ?>
                     <div class="book-item">
                         <h3><?php echo htmlspecialchars($pret['Titre']); ?></h3>
+                        <?php echo 'Retour le : ' . htmlspecialchars($pret['Date_Retour']); ?>
                         <img src="<?php echo htmlspecialchars($pret['Image_URL']); ?>" alt="Couverture du livre" width="150" height="200">
                         <?php if (isset($Id_Etat) && $Id_Etat == 3): ?>
                             <p>Frais de retard : <?php echo number_format($pret['Frais'], 2); ?> €</p>

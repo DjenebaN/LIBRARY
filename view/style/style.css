@@ -182,3 +182,35 @@ body {
     margin-top: 30px;
     margin-left: 20px;
 }
+.formLogin{
+    display: flex;
+    flex-direction: row;
+}
+
+.form1log{
+    height: 300px !important;
+    width: 300px !important;
+    background-color: #252526 !important;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.form1log input{
+    margin: 5px;
+}
+
+
+.form2log{
+    height: 300px !important;
+    width: 300px !important;
+    background-color: #252526 !important;
+    margin: 50px;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+.form2log input{
+    margin: 5px;
+}
