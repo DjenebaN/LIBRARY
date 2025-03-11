@@ -7,10 +7,6 @@
                 <input name="prenom" placeholder="Prenom" type="text" required class="input">
                 <input name="email" placeholder="Email" type="email" required class="input">
                 <input name="mdp" placeholder="Mot De Passe" type="password" required class="input">
-                <input name="telephone" placeholder="Telephone" type="text" required class="input">
-                <input name="adresse" placeholder="Adresse" type="text" required class="input">
-                <input name="cp" placeholder="CP" type="text" required class="input">
-                <input name="ville" placeholder="Ville" type="text" required class="input">
 
                 <input type="hidden" name="lecteur" value="ajouter">
                 <input type="submit" value="ajout">

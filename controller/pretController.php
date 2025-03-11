@@ -34,27 +34,43 @@ class PretController
 
     public function ajout()
     {
-        if (isset($_POST['Id_API'], $_POST['Titre'], $_POST['Auteur'], $_POST['Annee'], $_POST['Image_URL'], $_POST['Id_Lecteur'], $_POST['date_Emprunt'], $_POST['date_retour'])) {
+        if (isset($_POST['Id_API'], $_POST['Id_Lecteur'], $_POST['date_Emprunt'], $_POST['date_retour'])) {
             
-            $this->pret->ajouterLivreEtPret($_POST['Id_API'], $_POST['Titre'], $_POST['Auteur'], $_POST['Annee'], $_POST['Image_URL'], $_POST['Id_Lecteur'], $_POST['date_Emprunt'], $_POST['date_retour']);
-
-            header('Location: http://127.0.0.1/LIBRARY/');
-            exit();
-        } else {
-            echo "Tous les champs sont requis.";
+            if ($this->pret->livreEmprunteLecteur($_POST['Id_API'], $_POST['Id_Lecteur'])) {
+                echo "Vous avez déjà emprunté ce livre.";
+                exit();
+            } if ($this->pret->livreEmprunte($_POST['Id_API'])) {
+                echo "Ce livre a déjà été emprunté par quelqu'un d'autre.";
+                exit();
+            } else {
+                $this->pret->ajouterPret($_POST['Id_Lecteur'], $_POST['Id_API'], $_POST['date_Emprunt'], $_POST['date_retour']);
+                header('Location: http://127.0.0.1/LIBRARY/');
+                exit();
+            }
         }
     }
+
 
     public function supprimer()
     {
-        if (isset($_POST['Id_Pret'] , $_POST['Id_Livre'])) {
-            $this->pret->supprimerPret($_POST['Id_Pret'], $_POST['Id_Livre']);
-            header('Location: http://127.0.0.1/LIBRARY/');
-            exit();
+        // Vérification de l'ID du prêt
+        if (isset($_POST['Id_Pret'])) {
+            $idPret = $_POST['Id_Pret'];
+            echo "ID du prêt: " . $idPret;  // Afficher l'ID du prêt pour le débogage
+    
+            if (is_numeric($idPret)) {
+                $this->pret->supprimerPret($idPret);
+                header('Location: http://127.0.0.1/LIBRARY/');
+                exit();
+            } else {
+                echo "Erreur : L'ID du prêt n'est pas valide.";
+            }
+        } else {
+            echo "Erreur : Aucune ID de prêt reçue.";
         }
     }
-
 }
+
 
 
 ?>

@@ -17,19 +17,15 @@ class Lecteur
     return $stmt->fetch();
     }
 
-    public function ajouterLecteur($nom , $prenom , $email , $mdp , $telephone, $adresse, $cp, $ville)
+    public function ajouterLecteur($nom , $prenom , $email , $mdp)
     {
         $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT);
 
-        $req = $this -> bdd -> prepare("INSERT INTO LECTEUR (Nom, Prenom, Email, MDP, Telephone, Adresse, CP, Ville) VALUES (:nom , :prenom , :email , :mdp , :telephone , :adresse , :cp , :ville)");
+        $req = $this -> bdd -> prepare("INSERT INTO LECTEUR (Nom, Prenom, Email, MDP) VALUES (:nom , :prenom , :email , :mdp)");
         $req -> bindParam (':nom' , $nom);
         $req -> bindParam (':prenom' , $prenom);
         $req -> bindParam (':email' , $email);
         $req -> bindParam (':mdp' , $hashedPassword);
-        $req -> bindParam (':telephone' , $telephone);
-        $req -> bindParam (':adresse' , $adresse);
-        $req -> bindParam (':cp' , $cp);
-        $req -> bindParam (':ville' , $ville);
         return $req -> execute();
     }
 
@@ -40,16 +36,12 @@ class Lecteur
 }
 
 
-    public function modifierLecteur($nom, $prenom, $email, $mdp, $telephone, $adresse, $cp, $ville, $Id_Lecteur) {
-        $stmt = $this->bdd->prepare("UPDATE LECTEUR SET Nom = :nom, Prenom = :prenom, Email = :email, MDP = :mdp, Adresse = :adresse, CP = :cp , Ville = :ville WHERE Id_Lecteur = :Id_Lecteur");
+    public function modifierLecteur($nom, $prenom, $email, $mdp, $Id_Lecteur) {
+        $stmt = $this->bdd->prepare("UPDATE LECTEUR SET Nom = :nom, Prenom = :prenom, Email = :email, MDP = :mdp WHERE Id_Lecteur = :Id_Lecteur");
         $stmt->bindParam(':nom', $nom);
         $stmt->bindParam(':prenom', $prenom);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':mdp', $mdp);
-        $stmt->bindParam(':telephone', $telephone);
-        $stmt->bindParam(':adresse', $adresse);
-        $stmt->bindParam(':cp', $cp);
-        $stmt->bindParam(':ville', $ville);
         $stmt->bindParam(':Id_Lecteur', $Id_Lecteur); 
         $stmt->execute();
     }

@@ -40,9 +40,9 @@ class LecteurController
 
     public function ajout()
     {
-        if (isset ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST['telephone'], $_POST['adresse'], $_POST['cp'], $_POST['ville'])){
-            $this -> lecteur -> ajouterLecteur ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST['telephone'], $_POST['adresse'], $_POST['cp'], $_POST['ville']);
-            header('Location: http://127.0.0.1/LIBRARY/');
+        if (isset ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'])){
+            $this -> lecteur -> ajouterLecteur ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp']);
+            header('Location: http://127.0.0.1/LIBRARY/index.php?page=accueil');
             exit();
         } else {
             echo "Tous les champs sont requis.";
@@ -53,16 +53,16 @@ class LecteurController
     {
         if (isset ($_POST ['Id_Lecteur'])){
             $this -> lecteur -> supprimerLecteur($_POST ['Id_Lecteur']);
-            header('Location: http://127.0.0.1/LIBRARY/');
+            header('Location: http://127.0.0.1/LIBRARY/index.php?page=accueil');
             exit();
         }
     }
 
     public function modifier()
     {
-        if (isset ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST['telephone'], $_POST['adresse'], $_POST['cp'], $_POST['ville'], $_POST ['ID_Eleve'])){
-            $this -> lecteur -> modifierLecteur ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST['telephone'], $_POST['adresse'], $_POST['cp'], $_POST['ville'], $_POST ['ID_Eleve']);
-            header('Location: http://127.0.0.1/LIBRARY/');
+        if (isset ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST ['Id_Lecteur'])){
+            $this -> lecteur -> modifierLecteur ($_POST ['nom'], $_POST ['prenom'] , $_POST['email'], $_POST['mdp'], $_POST ['Id_Lecteur']);
+            header('Location: http://127.0.0.1/LIBRARY/index.php?page=accueil');
             exit();
         } else {
             echo "Tous les champs sont requis.";
@@ -82,7 +82,7 @@ class LecteurController
                 $_SESSION['prenom'] = $user['Prenom']; 
                 $_SESSION['nom'] = $user['Nom']; 
                 $_SESSION['email'] = $user['Email']; 
-                header('Location: http://127.0.0.1/LIBRARY/'); // Redirection
+                header('Location: http://127.0.0.1/LIBRARY/index.php?page=accueil'); // Redirection
                 exit();
             } else {
                 echo "Identifiants incorrects.";

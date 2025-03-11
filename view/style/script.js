@@ -1,128 +1,61 @@
 function Click(event) {
-    event.preventDefault();  // Empêche l'envoi du formulaire et le rechargement de la page
-    
-    const searchInput = document.getElementById("bar").value.trim();
-    if (searchInput === "") return; // Empêche une recherche vide
+    event.preventDefault();
 
-    const formattedSearch = searchInput.split(" ").join("+");  // Remplace les espaces par des "+"
-    const apiUrl = "https://openlibrary.org/search.json?q=" + formattedSearch;
+    const searchInput = document.getElementById("bar").value.trim();
+    if (searchInput === "") return;
+
+    const formattedSearch = searchInput.split(" ").join("+");
+    const apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + formattedSearch;
 
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const Resultat = document.getElementById('Resultat');
-            Resultat.innerHTML = "";  // Réinitialiser le contenu
+            const Livres = document.getElementById('Livres');
+            Livres.innerHTML = "";
 
-            if (!data.docs || data.docs.length === 0) {
-                Resultat.innerHTML = "<p>Aucun livre trouvé.</p>";
+            if (!data.items || data.items.length === 0) {
+                Livres.innerHTML = "<p>Aucun livre trouvé.</p>";
                 return;
             }
 
-            data.docs.forEach(livre => {
-                const livreRes = document.createElement('div');
-                livreRes.className = "livreRes"; // Applique la classe pour le style CSS
-                
-                // Contenu du livre
-                const Nom = document.createElement('div');
-                Nom.className = "Nom";
-                Nom.textContent = "Titre : " + (livre.title ? livre.title.toUpperCase() : "Inconnu");
-                livreRes.appendChild(Nom);
+            data.items.forEach(livre => {
+                const unLivre = document.createElement('div');
+                unLivre.className = "unLivre"
 
-                const AuteurLivre = document.createElement('div');
-                AuteurLivre.textContent = "Auteur : " + (livre.author_name ? livre.author_name.join(", ") : "Inconnu");
-                livreRes.appendChild(AuteurLivre);
+                const miniTitre = document.createElement('div');
+                miniTitre.className = "miniTitre"
+                miniTitre.textContent = "📖 " + (livre.volumeInfo.title ? livre.volumeInfo.title.toUpperCase() : "Inconnu");
+                unLivre.appendChild(miniTitre);
 
-                const DatePubli = document.createElement('div');
-                DatePubli.textContent = "Année : " + (livre.first_publish_year || "Inconnue");
-                livreRes.appendChild(DatePubli);
+                /*
+                // Auteur(s)
+                const AuteurLivre = document.createElement('p');
+                AuteurLivre.textContent = "✍️ Auteur : " + (livre.authors ? livre.authors.join(", ") : "Inconnu");
+                bookContainer.appendChild(AuteurLivre);
+                */
 
-                const Image = document.createElement('img');
-                Image.className = "Image";
-                Image.src = livre.cover_i
-                    ? `https://covers.openlibrary.org/b/id/${livre.cover_i}-L.jpg`
-                    : "view/style/default.jpg";
-                Image.alt = `Couverture de ${livre.title}`;
-                livreRes.appendChild(Image);
+                const miniDate = document.createElement('div');
+                miniDate.className = "miniDate"
+                miniDate.textContent = "📅 Année : " + (livre.volumeInfo.publishedDate || "Inconnue");
+                unLivre.appendChild(miniDate);
 
-                // Formulaire pour l'emprunt
-                const empruntForm = document.createElement('form');
-                empruntForm.className = "empruntForm";
-                empruntForm.method = "POST";
-                empruntForm.action = "controller/pretController.php";
+                if (livre.volumeInfo.imageLinks && livre.volumeInfo.imageLinks.thumbnail) {
+                    const miniLivre = document.createElement('img');
+                    miniLivre.className = "miniLivre"
+                    miniLivre.src = livre.volumeInfo.imageLinks.thumbnail;
+                    miniLivre.alt = `Couverture de ${livre.volumeInfo.title}`;
+                    unLivre.appendChild(miniLivre);
+                }
 
-                // Création des champs cachés pour l'emprunt (comme dans ton exemple)
-                const Id_Livre = document.createElement('input');
-                Id_Livre.type = "hidden";
-                Id_Livre.name = "Id_Livre";
-                Id_Livre.value = livre.key;
-                empruntForm.appendChild(Id_Livre);
+                const boutonVoir = document.createElement('button');
+                boutonVoir.className = "btnVoir";
+                boutonVoir.textContent = "Voir";
+                boutonVoir.onclick = function() {
+                    afficherDetails(livre);
+                };
+                unLivre.appendChild(boutonVoir);
 
-                const Id_LecteurInput = document.createElement('input');
-                Id_LecteurInput.type = "hidden";
-                Id_LecteurInput.name = "Id_Lecteur";
-                Id_LecteurInput.value = Id_Lecteur; // Assure-toi que Id_Lecteur est défini quelque part
-                empruntForm.appendChild(Id_LecteurInput);
-
-                const Date_Emprunt = document.createElement('input');
-                Date_Emprunt.type = "hidden";
-                Date_Emprunt.name = "date_Emprunt";
-                Date_Emprunt.value = new Date().toISOString().split('T')[0];
-                empruntForm.appendChild(Date_Emprunt);
-
-                const date_Emprunt = new Date(Date_Emprunt.value);
-                const date_Retour = new Date(date_Emprunt);
-                date_Retour.setDate(date_Retour.getDate() + 14);
-                const formattedDateRetour = date_Retour.toISOString().split('T')[0];
-
-                const Date_Retour = document.createElement('input');
-                Date_Retour.type = "hidden";
-                Date_Retour.name = "date_retour";
-                Date_Retour.value = formattedDateRetour;
-                empruntForm.appendChild(Date_Retour);
-
-                const Id_API = document.createElement('input');
-                Id_API.type = "hidden";
-                Id_API.name = "Id_API";
-                Id_API.value = livre.key;
-                empruntForm.appendChild(Id_API);
-
-                const Titre = document.createElement('input');
-                Titre.type = "hidden";
-                Titre.name = "Titre";
-                Titre.value = livre.title;
-                empruntForm.appendChild(Titre);
-
-                const Auteur = document.createElement('input');
-                Auteur.type = "hidden";
-                Auteur.name = "Auteur";
-                Auteur.value = livre.author_name ? livre.author_name.join(", ") : "Inconnu";
-                empruntForm.appendChild(Auteur);
-
-                const Annee = document.createElement('input');
-                Annee.type = "hidden";
-                Annee.name = "Annee";
-                Annee.value = livre.first_publish_year || "Inconnue";
-                empruntForm.appendChild(Annee);
-
-                const Image_URL = document.createElement('input');
-                Image_URL.type = "hidden";
-                Image_URL.name = "Image_URL";
-                Image_URL.value = livre.cover_i ? `https://covers.openlibrary.org/b/id/${livre.cover_i}-L.jpg` : "view/style/default.jpg";
-                empruntForm.appendChild(Image_URL);
-
-                const actionPret = document.createElement('input');
-                actionPret.type = "hidden";
-                actionPret.name = "pret";
-                actionPret.value = "ajouter";
-                empruntForm.appendChild(actionPret);
-
-                const bttPret = document.createElement('button');
-                bttPret.type = "submit";
-                bttPret.textContent = "Emprunter";
-                empruntForm.appendChild(bttPret);
-
-                livreRes.appendChild(empruntForm);
-                Resultat.appendChild(livreRes);
+                Livres.appendChild(unLivre);
             });
 
         })
@@ -130,3 +63,155 @@ function Click(event) {
             console.error("Erreur lors de la récupération des données :", error);
         });
 }
+
+function afficherDetails(livre) {
+    const Livres = document.getElementById('Livres');
+    Livres.innerHTML = "";
+
+    const details = document.getElementById('newDetailsSection');
+    details.innerHTML = '';  // Réinitialiser les détails
+
+    const titre = document.createElement('h2');
+    titre.textContent = livre.volumeInfo.title;
+
+    const auteur = document.createElement('p');
+    auteur.textContent = "Auteur(s) : " + (livre.volumeInfo.authors ? livre.volumeInfo.authors.join(", ") : "Inconnu");
+
+    const description = document.createElement('p');
+    description.textContent = "Description : " + (livre.volumeInfo.description || "Aucune description disponible.");
+
+    const date = document.createElement('p');
+    date.textContent = "Date de publication : " + (livre.volumeInfo.publishedDate || "Inconnue");
+
+    const image = document.createElement('img');
+    image.src = livre.volumeInfo.imageLinks ? livre.volumeInfo.imageLinks.thumbnail : 'default.jpg';
+    image.alt = `Couverture de ${livre.volumeInfo.title}`;
+
+    const empruntForm = document.createElement('form');
+    empruntForm.className = "empruntForm";
+    empruntForm.method = "POST";
+    empruntForm.action = "controller/pretController.php";
+
+    const Id_API = document.createElement('input');
+    Id_API.type = "hidden";
+    Id_API.name = "Id_API";
+    Id_API.value = livre.id;
+    empruntForm.appendChild(Id_API);
+
+    const Id_LecteurInput = document.createElement('input');
+    Id_LecteurInput.type = "hidden";
+    Id_LecteurInput.name = "Id_Lecteur";
+    Id_LecteurInput.value = Id_Lecteur;
+    empruntForm.appendChild(Id_LecteurInput);
+
+    const Date_Emprunt = document.createElement('input');
+    Date_Emprunt.type = "hidden";
+    Date_Emprunt.name = "date_Emprunt";
+    Date_Emprunt.value = new Date().toISOString().split('T')[0];
+    empruntForm.appendChild(Date_Emprunt);
+
+    const date_Emprunt = new Date(Date_Emprunt.value);
+    const date_Retour = new Date(date_Emprunt);
+    date_Retour.setDate(date_Retour.getDate() + 14);
+    const formattedDateRetour = date_Retour.toISOString().split('T')[0];
+
+    const Date_Retour = document.createElement('input');
+    Date_Retour.type = "hidden";
+    Date_Retour.name = "date_retour";
+    Date_Retour.value = formattedDateRetour;
+    empruntForm.appendChild(Date_Retour);
+
+    const actionPret = document.createElement('input');
+    actionPret.type = "hidden";
+    actionPret.name = "pret";
+    actionPret.value = "ajouter";
+    empruntForm.appendChild(actionPret);
+
+    const bttPret = document.createElement('button');
+    bttPret.type = "submit";
+    bttPret.textContent = "Emprunter";
+    empruntForm.appendChild(bttPret);
+
+    const favForm = document.createElement('form');
+    favForm.className = "empruntForm";
+    favForm.method = "POST";
+    favForm.action = "controller/favController.php";
+
+    favForm.appendChild(Id_LecteurInput);
+    favForm.appendChild(Id_API);
+
+    const actionFav = document.createElement('input');
+    actionFav.type = "hidden";
+    actionFav.name = "fav";
+    actionFav.value = "ajouter";
+    favForm.appendChild(actionFav);
+
+    const bttFav = document.createElement('button');
+    bttFav.type = "submit";
+    bttFav.textContent = "Favoris";
+    favForm.appendChild(bttFav);
+
+    details.appendChild(titre);
+    details.appendChild(auteur);
+    details.appendChild(date);
+    details.appendChild(description);
+    details.appendChild(image);
+    details.appendChild(empruntForm);
+    details.appendChild(favForm);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const livres = document.querySelectorAll('.livre');
+
+    livres.forEach(function (livreElement) {
+        const idAPI = livreElement.getAttribute('data-id-api');
+
+        fetch(`https://www.googleapis.com/books/v1/volumes/${idAPI}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Livre non trouvé');
+                } else {
+                    const detailsDiv = livreElement.querySelector('.details-livre');
+                    detailsDiv.innerHTML = '';
+
+                    const titre = document.createElement('h3');
+                    titre.textContent = data.volumeInfo.title;
+
+                    const image = document.createElement('img');
+                    image.src = data.volumeInfo.imageLinks ? data.volumeInfo.imageLinks.thumbnail : 'default.jpg';
+                    image.alt = `Couverture de ${data.volumeInfo.title}`;
+
+                    const retourForm = document.createElement('form');
+                    retourForm.className = "retourForm";
+                    retourForm.method = "POST";
+                    retourForm.action = "controller/pretController.php";
+
+                    const inputIdPret = document.createElement('input');
+                    inputIdPret.type = "hidden"; 
+                    inputIdPret.name = "Id_Pret";
+                    inputIdPret.value = livreElement.dataset.idPret;
+                    console.log(inputIdPret.value);
+                    retourForm.appendChild(inputIdPret);
+
+                    const actionRetour = document.createElement('input');
+                    actionRetour.type = "hidden";
+                    actionRetour.name = "pret";
+                    actionRetour.value = "supprimer";
+                    retourForm.appendChild(actionRetour);
+
+                    const bttRetour = document.createElement('button');
+                    bttRetour.type = "submit";
+                    bttRetour.textContent = "Retourner";
+                    retourForm.appendChild(bttRetour);
+
+                    detailsDiv.appendChild(titre);
+                    detailsDiv.appendChild(image);
+                    detailsDiv.appendChild(retourForm);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des détails du livre:', error);
+            });
+    });
+});

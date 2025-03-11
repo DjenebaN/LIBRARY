@@ -1,50 +1,35 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="view/style/style.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Bibliothèque</title>
+    <link rel="stylesheet" href="/LIBRARY/view/style/style.css">
+    <title>Document</title>
 </head>
 <body>
 
-<header class="header">
-</header>
-
-<aside class="sidebar">
-    <nav>
-        <ul>
-            <li>
-                <a href="index.php?page=Accueil" 
-                   class="<?php echo isset($_GET['page']) && $_GET['page'] == 'Accueil' ? 'active' : ''; ?>">
-                   <i class="fas fa-home"></i> Accueil
-                </a>
-            </li>
-            
-            <?php if (isset($_SESSION['Id_Lecteur'])) { ?>
-                <li>
-                    <a href="index.php?page=compte&ID_Lecteur=<?php echo htmlspecialchars($_SESSION['Id_Lecteur']) ?>" 
-                       class="<?php echo isset($_GET['page']) && $_GET['page'] == 'compte' ? 'active' : ''; ?>">
-                       <i class="fas fa-user"></i> Mon Profil
-                    </a>
-                </li>
-                <li>
-                    <a href="index.php?page=logOut" 
-                       class="<?php echo isset($_GET['page']) && $_GET['page'] == 'logOut' ? 'active' : ''; ?>">
-                       <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </a>
-                </li>
-            <?php } else { ?>
-                <li>
-                    <a href="index.php?page=logIn" 
-                       class="<?php echo isset($_GET['page']) && $_GET['page'] == 'logIn' ? 'active' : ''; ?>">
-                       <i class="fas fa-sign-in-alt"></i> Connexion
-                    </a>
-                </li>
-            <?php } ?>
-        </ul>
-    </nav>
-</aside>
-
-
+    <div class="side">
+        <div class="bar">
+            <div class="logo"></div>
+            <div class="profilPic">
+                <div class="pic">aaa</div>
+                <div class="name">aaa</div>
+            </div>
+            <div class="barLIste">
+                <ul>
+                    <li> <a href="index.php?page=Accueil">Livres</a> </li>
+                <?php if (isset($_SESSION['Id_Lecteur'])) { ?>
+                    <li> <a href="index.php?page=compte&Id_Lecteur=<?php echo htmlspecialchars($_SESSION['Id_Lecteur'])?>"> Mon Profil</a> </li>
+                    <li> <a href="index.php?page=logOut">Log Out</a> </li>
+                <?php } else { ?>
+                    <li> <a href="index.php?page=logIn">Log In</a> </li>
+                    <?php } ?>
+                    <li class="compteLi">#</li>
+                </ul>
+            </div>
+            <div class="sns">aaa</div>
+        </div> 
+        <div class="sDot"></div>
+        <div class="sLine"></div>
+    </div>
+    
