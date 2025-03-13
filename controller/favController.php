@@ -41,7 +41,7 @@ class FavController
                 exit();
             } else {
                 $this->fav->ajouterFav($_POST['Id_Lecteur'], $_POST['Id_API']);
-                header('Location: http://127.0.0.1/LIBRARY/');
+                header('Location: http://127.0.0.1/LIBRARY/index.php?page=livres');
                 exit();
             }
         }
@@ -50,10 +50,9 @@ class FavController
 
     public function supprimer()
     {
-        // Vérification de l'ID du prêt
         if (isset($_POST['Id_Fav'])) {
             $this->fav->supprimerFav($_POST['Id_Fav']);
-            header('Location: http://127.0.0.1/LIBRARY/');
+            header('Location: http://127.0.0.1/LIBRARY/index.php?page=livres');
             exit();
 
         } else {

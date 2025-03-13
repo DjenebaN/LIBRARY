@@ -35,20 +35,26 @@ class PretController
     public function ajout()
     {
         if (isset($_POST['Id_API'], $_POST['Id_Lecteur'], $_POST['date_Emprunt'], $_POST['date_retour'])) {
-            
+            var_dump($_POST['Id_API']);
+            var_dump($_POST['Id_Lecteur']);
             if ($this->pret->livreEmprunteLecteur($_POST['Id_API'], $_POST['Id_Lecteur'])) {
                 echo "Vous avez déjà emprunté ce livre.";
                 exit();
-            } if ($this->pret->livreEmprunte($_POST['Id_API'])) {
+            }
+            if ($this->pret->livreEmprunte($_POST['Id_API'])) {
                 echo "Ce livre a déjà été emprunté par quelqu'un d'autre.";
                 exit();
             } else {
-                $this->pret->ajouterPret($_POST['Id_Lecteur'], $_POST['Id_API'], $_POST['date_Emprunt'], $_POST['date_retour']);
-                header('Location: http://127.0.0.1/LIBRARY/');
+                $this->pret->ajouterPret($_POST['Id_API'], $_POST['Id_Lecteur'], $_POST['date_Emprunt'], $_POST['date_retour']);
+                header('Location: http://127.0.0.1/LIBRARY/index.php?page=livres');
                 exit();
             }
         }
     }
+
+
+    
+
 
 
     public function supprimer()
@@ -60,7 +66,7 @@ class PretController
     
             if (is_numeric($idPret)) {
                 $this->pret->supprimerPret($idPret);
-                header('Location: http://127.0.0.1/LIBRARY/');
+                header('Location: http://127.0.0.1/LIBRARY/index.php?page=livres');
                 exit();
             } else {
                 echo "Erreur : L'ID du prêt n'est pas valide.";

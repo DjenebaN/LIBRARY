@@ -10,11 +10,11 @@ class Fav
         $this -> bdd = $bdd;
     }
 
-    public function unLecteur($Id_Lecteur) 
+    public function mesFavs($Id_Lecteur) 
     {
-    $stmt = $this->bdd->prepare('SELECT * FROM LECTEUR WHERE Id_Lecteur = ?');
+    $stmt = $this->bdd->prepare('SELECT * FROM FAVORIS WHERE Id_Lecteur = ?');
     $stmt->execute([$Id_Lecteur]);
-    return $stmt->fetch();
+    return $stmt->fetchAll();
     }
 
     public function ajouterFav($Id_Lecteur , $Id_API)

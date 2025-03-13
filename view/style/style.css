@@ -5,11 +5,12 @@ html, body {
     width: 100vw;
     display: flex;
     flex-direction: row;
+    background: linear-gradient(to bottom right, #F0F8FF, #CBC3E3);
 }
 
 .side {
-    background-color: antiquewhite;
-    width: 300px;
+    background-color: rgba(189, 181, 213, 0.5);
+    width: 200px;
     height: 100%;
     display: flex;
     flex-direction: row;
@@ -17,36 +18,77 @@ html, body {
 }
 
 .mainContent {
-    background-color: aqua;
     flex-grow: 1;
     height: 100%;
 }
 
 .bar {
     display: flex;
-    justify-content: center;
     align-items: center;
     margin-left: 60px;
     flex-direction: column;
+    width: max-content;
 }
 
-.bar ul {
+.barLIste{
+    margin-top: 30px;
+}
+
+.barLIste ul {
     display: flex;
     flex-direction: column;
     padding: 0;
     margin: 0;
     list-style: none;
     justify-content: center;
+    gap: 10px;
 }
 
-.bar ul li {
-    margin: 0 55px;
+.imagesSearch ul li {
     text-align: center;
+    height: 30px;
+    width: 65px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.barLIste ul li div:hover {
+    height: 30px;
+    width: 70px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-left: -2px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.name{
+    height: 30px;
+    width: 70px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+ul li a {
+    color: inherit; /* Hérite la couleur du texte parent */
+    text-decoration: none; /* Supprime le soulignement */
+}
+
+a:hover {
+    color: plum;
 }
 
 .sDot{
     border-style: dashed;
     border-width: 1px;
+    margin-left: 50px;
 }
 
 .sLine{
@@ -63,7 +105,7 @@ html, body {
 }
 
 .imagesSearch{
-    margin-left: 400px;
+    margin-left: 100px;
 }
 
 .resultTitre{
@@ -75,51 +117,589 @@ html, body {
     margin-top: 50px;
     margin-left: 100px;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 20px;
-    max-height: 80vh;  /* Définit une hauteur maximale pour la section des livres */
-    overflow-y: auto;  /* Ajoute une barre de défilement si nécessaire */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-.unLivre{
-    background-color: antiquewhite;
-    height: 350px;
-    width: 200px;
+.unLivre {
+    background: linear-gradient(to bottom right, #F0F8FF, #CBC3E3);
+    height: 180px;
+    width: 800px;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
+    border-radius: 10px;
+    border: 1px solid #4B0082;
+    flex-shrink: 0;
+    padding: 10px; /* Ajouter un peu d'espace interne pour éviter l'écrasement */
+}
+
+.unLivre:hover {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .miniLivre {
-    background-color: aquamarine;
-    width: 130px; /* Laisser la largeur fixée */
-    height: auto; /* Laisser l'image se redimensionner naturellement pour garder ses proportions */
-    max-height: 150px; /* Limiter la hauteur maximale */
-    object-fit: contain; /* Pour éviter de déformer l'image */
+    width: 170px;
+    height: auto;
+    max-height: 180px;
+    object-fit: contain;
 }
 
 
 .miniTitre{
-    background-color: beige;
-    height: 50px;
+    margin-top: 15px;
     width: auto;
-    margin-top: -10px;
+    margin-bottom: -10px;
 }
 
 .miniDate{
-    background-color: blue;
     height: 50px;
     width: 150px;
-    margin-top: 20px;
+    margin-top: 2px;
 }
 
 .voir{
     background-color: white;
-    height: 50px;
+    height: 70px;
     width: 130px;
 }
 
-#newDetailsSection{
-    background-color: brown;
+.dotProfile{
+    height: 75px;
+    width: 75px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 5px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profilPic{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.logo{
+    margin-top: 20px;
+}
+
+.sns{
+    margin-top: 300px;
+}
+
+/* From Uiverse.io by joe-watson-sbf */ 
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    background-color: transparent; /* Assurer que le fond du formulaire soit transparent */
+}
+
+.search__input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    background-color: transparent; /* Fond transparent pour l'input */
+    border: none;
+    color: black;
+    font-weight: 900;
+    padding: 0.7rem 1rem;
+    border: 2px solid #4B0082;
+    border-radius: 30px;
+    width: 340px;
+    height: 10px;
+    transition: all ease-in-out .5s;
+    margin-right: -2rem;
+}
+
+.search__input:focus {
+    outline: none;
+    background-color: transparent;
+}
+
+.search__input::-webkit-input-placeholder {
+    font-weight: 100;
+    color: black;
+}
+
+.search__input:focus + .search__button {
+    background-color: transparent; /* Assurer que le fond du bouton soit aussi transparent */
+}
+
+.search__button {
+    border: none;
+    background-color: transparent; /* Fond transparent pour le bouton */
+    margin-top: .1em;
+}
+
+.search__button:hover {
+    cursor: pointer;
+}
+
+.search__icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill: #4B0082;
+    stroke: #4B0082; /* Adds a stroke color */
+    stroke-width: 0.2em;
+}
+
+.imagesSearch ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 20px;
+}
+
+.imagesSearch ul li{
+    height: 30px;
+    width: 70px;
+    background-color: aliceblue;
+    border-radius: 20px;
+}
+
+.imagesSearch ul li:hover{
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.avantSearch h2{
+    text-decoration: underline;
+}
+
+.ressourcesBloc{
+    height: 300px;
+    width: 900px;
+    display: flex;
+    flex-direction: row;
+}
+
+.ressources{
+    height: 250px;
+    width: 550px;
+    background-color: rgba(240, 248, 255, 0.1);
+    border-radius: 20px;
+    border: 1px solid #6E260E;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.ressources ul{
+    display: flex;
+    flex-direction: column;
+    list-style: circle;
+    gap: 10px;
+}
+
+.imgRessources{
+    height: 250px;
+    width: 350px;
+}
+
+.livresJour {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.livresJour ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    list-style: none;
+    gap: 110px;
+}
+
+.livreJ {
+    background-color: black;
+    height: 180px;
+    width: 140px;
+}
+
+.livreJ img {
+    height: 180px;
+    width: 140px;
+}
+
+.Gauche {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 180px; /* Augmenter la largeur pour s'adapter à l'image */
+    margin-right: 20px; /* Réduire l'espace entre la Gauche et la Droite */
+}
+
+.AuteurLivre{
+    margin-top: 5px;
+}
+
+.miniDescription {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Nombre de lignes max */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ajoute "..." si le texte est tronqué */
+    max-width: 400px; /* Ajuste la largeur si nécessaire */
+    margin-top: -40px;
+}
+
+.buttonVoir {
+    background-color: #fff8e7;
+    border: 1px solid rgb(209, 213, 219);
+    border-radius: 0.5rem;
+    color: #111827;
+    font-weight: 600;
+    line-height: 1.25rem;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    margin-left: 500px;
+    height: 40px;
+    margin-bottom: 10px;
+    margin-top: -20px;
+}
+  
+.buttonVoir:hover {
+    background-color: #ffe5b4;
+}
+  
+.buttonVoir:focus {
+    outline: 2px solid rgba(0, 0, 0, 0.1);
+    outline-offset: 2px;
+}
+  
+.buttonVoir:focus-visible {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+  
+#newDetailsSection {
+    margin-left: 90px;
+    margin-right: 90px;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+}
+
+.GauchePlus {
+    height: 500px;
+    width: 600px;
+    margin-right: 20px;
+}
+
+.DroitePlus {
+    background-color: azure;
+    height: 500px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.TitrePlus{
+    margin-left: 40px;
+}
+
+.AuteurPlus{
+    margin-left: 40px;
+}
+
+.BullesPlus ul{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 50px;
+}
+
+.BullesPlus ul li{
+
+    height: 20px;
+    width: auto;
+    padding: 5px;
+    background-color: aliceblue;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bttFav {
+    background: none;
+    border: none; /* Supprime la bordure */
+    cursor: pointer; /* Change le curseur au survol */
+    font-size: large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bttFav:hover{
+    color: red;
+}
+
+.ResumePlus{
+    margin-left: 40px;
+}
+
+.bttPret{
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.imgPlus{
+    height: 500px;
+    width: auto;
+    border-radius: 10px;
+}
+
+.bttPret {
+    position: relative;
+    padding: 12px 35px;
+    background: #fec195;
+    font-size: 17px;
+    font-weight: 500;
+    color: #181818;
+    border: 3px solid #fec195;
+    border-radius: 8px;
+    box-shadow: 0 0 0 #fec1958c;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .star-1 {
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 25px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+  }
+  
+  .star-2 {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    width: 15px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 1s cubic-bezier(0, 0.4, 0, 1.01);
+  }
+  
+  .star-3 {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    width: 5px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 1s cubic-bezier(0, 0.4, 0, 1.01);
+  }
+  
+  .star-4 {
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    width: 8px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 0.8s cubic-bezier(0, 0.4, 0, 1.01);
+  }
+  
+  .star-5 {
+    position: absolute;
+    top: 25%;
+    left: 45%;
+    width: 15px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 0.6s cubic-bezier(0, 0.4, 0, 1.01);
+  }
+  
+  .star-6 {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    width: 5px;
+    height: auto;
+    filter: drop-shadow(0 0 0 #fffdef);
+    z-index: -5;
+    transition: all 0.8s ease;
+  }
+  
+  .bttPret:hover {
+    background: transparent;
+    color: #fec195;
+    box-shadow: 0 0 25px #fec1958c;
+  }
+  
+  .bttPret:hover .star-1 {
+    position: absolute;
+    top: -80%;
+    left: -30%;
+    width: 25px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .bttPret:hover .star-2 {
+    position: absolute;
+    top: -25%;
+    left: 10%;
+    width: 15px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .bttPret:hover .star-3 {
+    position: absolute;
+    top: 55%;
+    left: 25%;
+    width: 5px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .bttPret:hover .star-4 {
+    position: absolute;
+    top: 30%;
+    left: 80%;
+    width: 8px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .bttPret:hover .star-5 {
+    position: absolute;
+    top: 25%;
+    left: 115%;
+    width: 15px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .bttPret:hover .star-6 {
+    position: absolute;
+    top: 5%;
+    left: 60%;
+    width: 5px;
+    height: auto;
+    filter: drop-shadow(0 0 10px #fffdef);
+    z-index: 2;
+  }
+  
+  .fil0 {
+    fill: #fffdef;
+  }
+
+#filtrePrets{
+    display: flex;
+    flex-direction: row;
+    margin-left: 40px;
+}  
+
+#filtrePrets form{
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.tousPrets {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Colonnes dynamiques */
+    gap: 15px; /* Espacement entre les livres */
+    width: 900px;
+    max-height: 500px; /* Hauteur max avant activation du scroll */
+    overflow-y: auto; /* Ajout d'un scroll vertical si nécessaire */
+    padding: 10px;
+    margin-left: 40px;
+    gap: 20px;
+}
+
+.livre {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    height: 300px;
+    width: 250px;
+}
+
+.favori{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    height: 300px;
+    width: 250px;
+}
+
+.details-livre{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    gap: 5px;
+}
+
+.details-favori{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    gap: 5px;
+}
+
+#filtrePrets select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+#filtrePrets select:hover {
+    border-color: #007bff;
+}
+#filtrePrets select:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 91, 187, 0.5);
+}
+
+.imgRessources{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.imgRessources img{
+    height: 250px;
+    width: auto;
 }

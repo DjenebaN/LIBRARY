@@ -32,6 +32,7 @@ class Pret
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function supprimerPret($Id_Pret)
     {
         $req = $this->bdd->prepare("DELETE FROM PRET WHERE Id_Pret = ?");
@@ -45,27 +46,31 @@ class Pret
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    
+
     public function livreEmprunteLecteur($Id_API, $Id_Lecteur) 
     {
         $query = "SELECT COUNT(*) FROM PRET WHERE Id_API = :Id_API AND Id_Lecteur = :Id_Lecteur";
         $stmt = $this->bdd->prepare($query);
-        $stmt->bindParam(':Id_API', $Id_API, PDO::PARAM_INT);
-        $stmt->bindParam(':Id_Lecteur', $Id_Lecteur, PDO::PARAM_INT);
+        $stmt->bindParam(':Id_API', $Id_API, PDO::PARAM_STR); 
+        $stmt->bindParam(':Id_Lecteur', $Id_Lecteur, PDO::PARAM_INT); 
         $stmt->execute();
-        
         return intval($stmt->fetchColumn()) > 0;
     }
 
-    public function livreEmprunte($Id_API) 
+
+    public function livreEmprunte($Id_API)
     {
         $query = "SELECT COUNT(*) FROM PRET WHERE Id_API = :Id_API";
         $stmt = $this->bdd->prepare($query);
-        $stmt->bindParam(':Id_API', $Id_API, PDO::PARAM_INT);
+        $stmt->bindParam(':Id_API', $Id_API, PDO::PARAM_STR); 
         $stmt->execute();
-        
-        return intval($stmt->fetchColumn()) > 0;
+        $result = $stmt->fetchColumn();
+        var_dump($result);
+
+        return intval($result) > 0;
     }
+
+
     
 
 }

@@ -20,40 +20,53 @@ function Click(event) {
 
             data.items.forEach(livre => {
                 const unLivre = document.createElement('div');
-                unLivre.className = "unLivre"
+                unLivre.className = "unLivre";
 
-                const miniTitre = document.createElement('div');
-                miniTitre.className = "miniTitre"
-                miniTitre.textContent = "📖 " + (livre.volumeInfo.title ? livre.volumeInfo.title.toUpperCase() : "Inconnu");
-                unLivre.appendChild(miniTitre);
+                const Droite = document.createElement('div');
+                Droite.className = "Droite";
 
-                /*
-                // Auteur(s)
+                const Gauche = document.createElement('div');
+                Gauche.className = "Gauche";
+
+                const miniTitre = document.createElement('p');
+                miniTitre.className = "miniTitre";
+                miniTitre.textContent = (livre.volumeInfo.title ? livre.volumeInfo.title.toUpperCase() : "Inconnu");
+                Droite.appendChild(miniTitre);
+
                 const AuteurLivre = document.createElement('p');
-                AuteurLivre.textContent = "✍️ Auteur : " + (livre.authors ? livre.authors.join(", ") : "Inconnu");
-                bookContainer.appendChild(AuteurLivre);
-                */
+                AuteurLivre.className = "AuteurLivre";
+                AuteurLivre.textContent = (livre.volumeInfo.authors ? livre.volumeInfo.authors.join(", ") : "Inconnu");
+                Droite.appendChild(AuteurLivre);
 
-                const miniDate = document.createElement('div');
-                miniDate.className = "miniDate"
-                miniDate.textContent = "📅 Année : " + (livre.volumeInfo.publishedDate || "Inconnue");
-                unLivre.appendChild(miniDate);
+
+                const miniDate = document.createElement('p');
+                miniDate.className = "miniDate";
+                miniDate.textContent = (livre.volumeInfo.publishedDate || "Inconnue");
+                Droite.appendChild(miniDate);
+
+                const miniDescription = document.createElement('p');
+                miniDescription.className = "miniDescription";
+                miniDescription.textContent = (livre.volumeInfo.description || "Aucune description disponible.");
+                Droite.appendChild(miniDescription);
 
                 if (livre.volumeInfo.imageLinks && livre.volumeInfo.imageLinks.thumbnail) {
                     const miniLivre = document.createElement('img');
-                    miniLivre.className = "miniLivre"
+                    miniLivre.className = "miniLivre";
                     miniLivre.src = livre.volumeInfo.imageLinks.thumbnail;
                     miniLivre.alt = `Couverture de ${livre.volumeInfo.title}`;
-                    unLivre.appendChild(miniLivre);
+                    Gauche.appendChild(miniLivre);
                 }
 
                 const boutonVoir = document.createElement('button');
-                boutonVoir.className = "btnVoir";
+                boutonVoir.className = "buttonVoir";
                 boutonVoir.textContent = "Voir";
                 boutonVoir.onclick = function() {
                     afficherDetails(livre);
                 };
-                unLivre.appendChild(boutonVoir);
+                Droite.appendChild(boutonVoir);
+
+                unLivre.appendChild(Gauche);
+                unLivre.appendChild(Droite);
 
                 Livres.appendChild(unLivre);
             });
@@ -65,27 +78,46 @@ function Click(event) {
 }
 
 function afficherDetails(livre) {
+
     const Livres = document.getElementById('Livres');
     Livres.innerHTML = "";
 
     const details = document.getElementById('newDetailsSection');
-    details.innerHTML = '';  // Réinitialiser les détails
+    details.innerHTML = '';
 
-    const titre = document.createElement('h2');
-    titre.textContent = livre.volumeInfo.title;
+    const GauchePlus = document.createElement('div');
+    GauchePlus.className = "GauchePlus";
 
-    const auteur = document.createElement('p');
-    auteur.textContent = "Auteur(s) : " + (livre.volumeInfo.authors ? livre.volumeInfo.authors.join(", ") : "Inconnu");
+    const DroitePlus = document.createElement('div');
+    DroitePlus.className = "DroitePlus";
 
-    const description = document.createElement('p');
-    description.textContent = "Description : " + (livre.volumeInfo.description || "Aucune description disponible.");
+    const BullesPlus = document.createElement('div');
+    BullesPlus.className = "BullesPlus";
 
-    const date = document.createElement('p');
-    date.textContent = "Date de publication : " + (livre.volumeInfo.publishedDate || "Inconnue");
+    const ul = document.createElement('ul');
 
-    const image = document.createElement('img');
-    image.src = livre.volumeInfo.imageLinks ? livre.volumeInfo.imageLinks.thumbnail : 'default.jpg';
-    image.alt = `Couverture de ${livre.volumeInfo.title}`;
+    const TitrePlus = document.createElement('h1');
+    TitrePlus.className = "TitrePlus";
+    TitrePlus.textContent = livre.volumeInfo.title;
+
+    const AuteurPlus = document.createElement('div');
+    AuteurPlus.className = "AuteurPlus";
+    AuteurPlus.textContent = (livre.volumeInfo.authors ? livre.volumeInfo.authors.join(", ") : "Inconnu");
+
+    const ResumePlus = document.createElement('div');
+    ResumePlus.className = "ResumePlus";
+    ResumePlus.textContent = (livre.volumeInfo.description || "Aucune description disponible.");
+
+    const Rate = document.createElement('li');
+    Rate.textContent = (livre.volumeInfo.averageRating || "Aucune description disponible.");
+
+    const DatePlus = document.createElement('li');
+    DatePlus.textContent = (livre.volumeInfo.publishedDate || "Inconnue");
+
+    const imgPlus = document.createElement('img'); // Doit être une image
+    imgPlus.className = "imgPlus";
+    imgPlus.src = livre.volumeInfo.imageLinks ? livre.volumeInfo.imageLinks.thumbnail : 'default.jpg';
+    imgPlus.alt = `Couverture de ${livre.volumeInfo.title}`;
 
     const empruntForm = document.createElement('form');
     empruntForm.className = "empruntForm";
@@ -128,8 +160,10 @@ function afficherDetails(livre) {
     empruntForm.appendChild(actionPret);
 
     const bttPret = document.createElement('button');
+    bttPret.className = "bttPret";
     bttPret.type = "submit";
     bttPret.textContent = "Emprunter";
+    
     empruntForm.appendChild(bttPret);
 
     const favForm = document.createElement('form');
@@ -137,8 +171,18 @@ function afficherDetails(livre) {
     favForm.method = "POST";
     favForm.action = "controller/favController.php";
 
-    favForm.appendChild(Id_LecteurInput);
-    favForm.appendChild(Id_API);
+    // Créer de nouveaux inputs pour le formulaire favoris pour éviter le conflit
+    const Id_LecteurInputFav = document.createElement('input');
+    Id_LecteurInputFav.type = "hidden";
+    Id_LecteurInputFav.name = "Id_Lecteur";
+    Id_LecteurInputFav.value = Id_Lecteur;
+    favForm.appendChild(Id_LecteurInputFav);
+
+    const Id_API_Fav = document.createElement('input');
+    Id_API_Fav.type = "hidden";
+    Id_API_Fav.name = "Id_API";
+    Id_API_Fav.value = livre.id;
+    favForm.appendChild(Id_API_Fav);
 
     const actionFav = document.createElement('input');
     actionFav.type = "hidden";
@@ -147,18 +191,35 @@ function afficherDetails(livre) {
     favForm.appendChild(actionFav);
 
     const bttFav = document.createElement('button');
+    bttFav.className = "bttFav";
     bttFav.type = "submit";
-    bttFav.textContent = "Favoris";
+    bttFav.textContent = " ♥︎ ";
     favForm.appendChild(bttFav);
 
-    details.appendChild(titre);
-    details.appendChild(auteur);
-    details.appendChild(date);
-    details.appendChild(description);
-    details.appendChild(image);
-    details.appendChild(empruntForm);
-    details.appendChild(favForm);
+    const favLi = document.createElement('li');
+    favLi.appendChild(favForm);
+    
+    ul.appendChild(Rate);
+    ul.appendChild(DatePlus);
+    ul.appendChild(favLi);
+
+    BullesPlus.appendChild(ul);
+
+    //ajout a gauche
+    GauchePlus.appendChild(TitrePlus);
+    GauchePlus.appendChild(AuteurPlus);
+    GauchePlus.appendChild(BullesPlus);
+    GauchePlus.appendChild(ResumePlus);
+    GauchePlus.appendChild(empruntForm);
+
+    //ajout a droite
+    DroitePlus.appendChild(imgPlus);
+
+    //ajout a detail
+    details.appendChild(GauchePlus);
+    details.appendChild(DroitePlus);
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const livres = document.querySelectorAll('.livre');
@@ -175,11 +236,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     const detailsDiv = livreElement.querySelector('.details-livre');
                     detailsDiv.innerHTML = '';
 
-                    const titre = document.createElement('h3');
+                    const titre = document.createElement('p');
                     titre.textContent = data.volumeInfo.title;
 
                     const image = document.createElement('img');
-                    image.src = data.volumeInfo.imageLinks ? data.volumeInfo.imageLinks.thumbnail : 'default.jpg';
+                    image.src = data.volumeInfo.imageLinks ? data.volumeInfo.imageLinks.thumbnail : '/view/style/default.jpg';
                     image.alt = `Couverture de ${data.volumeInfo.title}`;
 
                     const retourForm = document.createElement('form');
@@ -201,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     retourForm.appendChild(actionRetour);
 
                     const bttRetour = document.createElement('button');
+                    bttRetour.className = "log";
                     bttRetour.type = "submit";
                     bttRetour.textContent = "Retourner";
                     retourForm.appendChild(bttRetour);
@@ -215,3 +277,61 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const favoris = document.querySelectorAll('.favori'); // Changer la classe cible
+
+    favoris.forEach(function (favoriElement) {
+        const idAPI = favoriElement.getAttribute('data-id-api');
+
+        fetch(`https://www.googleapis.com/books/v1/volumes/${idAPI}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Livre favori non trouvé');
+                } else {
+                    const detailsDiv = favoriElement.querySelector('.details-favori');
+                    detailsDiv.innerHTML = '';
+
+                    const titre = document.createElement('p');
+                    titre.textContent = data.volumeInfo.title;
+
+                    const image = document.createElement('img');
+                    image.src = data.volumeInfo.imageLinks ? data.volumeInfo.imageLinks.thumbnail : 'default.jpg';
+                    image.alt = `Couverture de ${data.volumeInfo.title}`;
+
+                    // Formulaire pour supprimer le favori
+                    const supprimerForm = document.createElement('form');
+                    supprimerForm.className = "supprimerForm";
+                    supprimerForm.method = "POST";
+                    supprimerForm.action = "controller/favController.php";
+
+                    const inputIdFav = document.createElement('input');
+                    inputIdFav.type = "hidden";
+                    inputIdFav.name = "Id_Fav";
+                    inputIdFav.value = favoriElement.dataset.idFav;
+                    supprimerForm.appendChild(inputIdFav);
+
+                    const actionSupprimer = document.createElement('input');
+                    actionSupprimer.type = "hidden";
+                    actionSupprimer.name = "fav";
+                    actionSupprimer.value = "supprimer";
+                    supprimerForm.appendChild(actionSupprimer);
+
+                    const bttSupprimer = document.createElement('button');
+                    bttSupprimer.className = "log";
+                    bttSupprimer.type = "submit";
+                    bttSupprimer.textContent = "Supprimer des favoris";
+                    supprimerForm.appendChild(bttSupprimer);
+
+                    detailsDiv.appendChild(titre);
+                    detailsDiv.appendChild(image);
+                    detailsDiv.appendChild(supprimerForm);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des détails du livre favori:', error);
+            });
+    });
+});
+
